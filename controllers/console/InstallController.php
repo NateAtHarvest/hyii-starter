@@ -10,35 +10,28 @@ use yii\console\ExitCode;
 class InstallController extends BaseInstall
 {
     /**
-     * Installs this API
+     * Installs this App
      * @param bool $bUseBaseInstallMigration
      *
      * @return int
      */
-    public function actionApi($bUseBaseInstallMigration=false)
+    public function actionIndex($bUseBaseInstallMigration=false)
     {
         /**
          * Run parent action, but don't use the parent install migration
          */
-        parent::actionApi($bUseBaseInstallMigration);
+        parent::actionIndex($bUseBaseInstallMigration);
 
         /**
          * Run our own install migration for this app so we can install our own tables
          */
-        $installMigration = new Install([
-            'username' => $this->username,
-            'firstName' => $this->firstName,
-            'lastName' => $this->lastName,
-            'password' => $this->password,
-            'admin' => 'S',
-            'email' => $this->emailAddress,
-        ]);
+        $installMigration = new \hyii\migrations\Install();
         $result = $installMigration->safeUp();
 
         if ($result) {
-            BaseApi::_console("Installation Done! ");
+            hyii::_console("Installation Done! ");
         } else {
-            BaseApi::_console("Installation Failed!");
+            hyii::_console("Installation Failed!");
         }
 
         return ExitCode::OK;
@@ -55,9 +48,9 @@ class InstallController extends BaseInstall
         $result = $uninstallMigration->safeDown();
 
         if ($result) {
-            BaseApi::_console("Removal Done! ");
+            hyii::_console("Removal Done! ");
         } else {
-            BaseApi::_console("Removal Failed!");
+            hyii::_console("Removal Failed!");
         }
 
         return ExitCode::OK;
